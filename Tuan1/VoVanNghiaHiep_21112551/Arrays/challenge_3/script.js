@@ -1,7 +1,7 @@
 data1 = [5, 2, 4, 1, 15, 8, 3]
 data2 = [16, 6, 10, 5, 6, 1, 4]
 
-function calcAverageHumanAge(data) {
+const average = (data) =>{
   const humanAges = data.map(age => (age <= 2 ? 2 * age : 16 + age * 4));
 
   const adultAges = humanAges.filter(age => age >= 18);
@@ -11,7 +11,7 @@ function calcAverageHumanAge(data) {
   console.log(averageAge);
   return averageAge;
 }
-calcAverageHumanAge(data1);
-calcAverageHumanAge(data2);
+average(data1);
+average(data2);
 
 
