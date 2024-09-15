@@ -37,7 +37,7 @@ export default function App() {
         </TouchableOpacity>
          
          <View style={{alignItems:"center"}}>
-<Text style={{color:"red"}}>{message}</Text>
+         <Text style={{color:"red"}}>{message}</Text>
          
           <Text style={{fontWeight:500,marginTop:20}}>Forgot Your Password</Text>
           
