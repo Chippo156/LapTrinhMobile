@@ -56,13 +56,11 @@ const Item = ({obj,image}) => (
      <Text style={styles.title}>{obj.name}</Text>
       
      <View>
-     <Image source={require('./assets/Group 5.png')} style={{width: 200, height: 20}} />
+     <Image source={require('./assets/Group 5.png')} style={{width: 156, height: 20}} />
      </View>
-    
-    
-    <View style={{justifyContent:'center',flexDirection:'row'}}>
-        <Text>{obj.price}</Text>
-        <Text> {obj.discount}</Text>
+    <View style={{justifyContent:'flex-start',flexDirection:'row'}}>
+        <Text  style={{fontWeight:'700'}}>{obj.price}</Text>
+        <Text> -{obj.discount}%</Text>
      </View>
     
   </View>
@@ -114,12 +112,11 @@ const styles = StyleSheet.create({
   },
   item:{
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     marginVertical: 8,
     gap:10,
-    borderBottomWidth: 1,
-    borderBottomColor: 'gray',
+    
     padding: 10,
   },
   chat:{
