@@ -17,7 +17,6 @@ const Item = ({ obj }) => {
     </View>
   );
 };
-
 export default function App() {
   const [users, setUsers] = useState([]);
 
@@ -88,7 +87,6 @@ export default function App() {
         "Content-Type": "application/json",
       },
     };
-
     try {
       const response = await fetch(
         `https://66fc8f39c3a184a84d174f4d.mockapi.io/users/${id}`,
