@@ -8,11 +8,14 @@ import {
   FlatList,
 } from "react-native";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { NavigationContainer, useFocusEffect } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 function Screen2({ route, navigation }) {
+  const [inputValue, setInputValue] = useState("");
+
+  const { refresh } = route.params || {};
   const [course, setData] = useState([]);
   const getCourse = async () => {
     try {
@@ -32,9 +35,23 @@ function Screen2({ route, navigation }) {
     navigation.navigate("Screen1");
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      getCourse();
+    }, [])
+  );
   useEffect(() => {
     getCourse();
   }, []);
+
+  const filterData = course.filter((item) => {
+    if (inputValue === "") {
+      return item;
+    } else {
+      return item.name.toLowerCase().includes(inputValue.toLowerCase());
+    }
+  });
+
   const Item = ({ obj }) => {
     return (
       <View style={styles.data}>
@@ -88,12 +105,14 @@ function Screen2({ route, navigation }) {
             width: "100%",
             height: 40,
           }}
+          value={inputValue}
+          onChangeText={setInputValue}
           placeholder="Search"
         />
       </View>
       <FlatList
         style={{ marginTop: 20 }}
-        data={course}
+        data={filterData}
         renderItem={({ item }) => <Item obj={item} />}
         keyExtractor={(item) => item.id}
         numColumns={1}
@@ -169,30 +188,17 @@ function Screen3({ navigation }) {
         option
       );
       const data = await response.json();
-      console.log(data);
-      navigation.navigate("Screen2");
-    } catch (error) {
-      console.error(error);
-    }
-    getCourse();
-  };
-  const getCourse = async () => {
-    try {
-      const response = await fetch(
-        "https://66fc8f39c3a184a84d174f4d.mockapi.io/cource"
-      );
-      const data = await response.json();
-      setData(data);
+      backScreen2();
     } catch (error) {
       console.error(error);
     }
   };
 
   const backScreen2 = () => {
-    navigation.navigate("Screen2");
+    navigation.navigate("Screen2", { refresh: true });
   };
   return (
-    <View style={{ gap: 30 }}>
+    <View style={[styles.src1Main, { gap: 90 }]}>
       <View
         style={{
           flexDirection: "row",
@@ -262,6 +268,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 100,
     justifyContent: "center",
+    padding: 20,
   },
   data: {
     flexDirection: "row",
@@ -298,9 +305,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   src1Main: {
+    backgroundColor: "#fff",
     flex: 1,
     padding: 30,
-    margin: 10,
+
     flexDirection: "column",
     justifyContent: "center",
   },
