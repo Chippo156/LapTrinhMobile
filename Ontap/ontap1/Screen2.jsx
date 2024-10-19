@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import {
   FlatList,
@@ -11,14 +11,15 @@ import { Button } from "react-native";
 import { Text, TextInput } from "react-native-web";
 
 export default function Screen2({ route, navigation }) {
-  const products = [
+  const [products, setProducts] = useState([]);
+  const product = [
     {
       id: 1,
       name: "Apple",
       cate: "Vegetable",
       price: 28.0,
       des: "aaaa",
-      img: require("./assets/tao.jpg"),
+      img: "https://res.cloudinary.com/dyoavvrjm/image/upload/v1729321045/nrwnw1ihywhswnoesaov.jpg",
     },
     {
       id: 2,
@@ -26,7 +27,7 @@ export default function Screen2({ route, navigation }) {
       cate: "Vegetable",
       price: 28.0,
       des: "aaaa",
-      img: require("./assets/le.jpg"),
+      img: "https://res.cloudinary.com/dyoavvrjm/image/upload/v1729321045/kguwpzui1arfv35bjgqz.jpg",
     },
     {
       id: 3,
@@ -34,7 +35,7 @@ export default function Screen2({ route, navigation }) {
       cate: "Vegetable",
       price: 28.0,
       des: "aaaa",
-      img: require("./assets/dua.jpg"),
+      img: "https://res.cloudinary.com/dyoavvrjm/image/upload/v1729321045/g5l2sluauwu3arzxllb9.jpg",
     },
     {
       id: 4,
@@ -42,7 +43,7 @@ export default function Screen2({ route, navigation }) {
       cate: "Drinks",
       price: 28.0,
       des: "aaaa",
-      img: require("./assets/cam.jpg"),
+      img: "https://res.cloudinary.com/dyoavvrjm/image/upload/v1729321044/afimx6f1cc16promtc8p.jpg",
     },
     {
       id: 5,
@@ -50,7 +51,7 @@ export default function Screen2({ route, navigation }) {
       cate: "Drinks",
       price: 28.0,
       des: "aaaa",
-      img: require("./assets/tao.jpg"),
+      img: "https://res.cloudinary.com/dyoavvrjm/image/upload/v1729321045/nrwnw1ihywhswnoesaov.jpg",
     },
     {
       id: 6,
@@ -58,7 +59,7 @@ export default function Screen2({ route, navigation }) {
       cate: "Drinks",
       price: 28.0,
       des: "aaaa",
-      img: require("./assets/tao.jpg"),
+      img: "https://res.cloudinary.com/dyoavvrjm/image/upload/v1729321045/nrwnw1ihywhswnoesaov.jpg",
     },
     {
       id: 7,
@@ -66,9 +67,46 @@ export default function Screen2({ route, navigation }) {
       cate: "Drinks",
       price: 28.0,
       des: "aaaa",
-      img: require("./assets/tao.jpg"),
+      img: "https://res.cloudinary.com/dyoavvrjm/image/upload/v1729321045/nrwnw1ihywhswnoesaov.jpg",
     },
   ];
+
+  const getProducts = async () => {
+    const api = "https://66fc8f39c3a184a84d174f4d.mockapi.io/drinks";
+
+    try {
+      let response = await fetch(api, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      let json = await response.json();
+      setProducts(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const createProducts = async (product) => {
+    const api = "https://66fc8f39c3a184a84d174f4d.mockapi.io/drinks";
+    try {
+      let response = await fetch(api, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      });
+      let json = await response.json();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   const [inputValue, setInputValue] = useState("");
   const [cate, setCate] = useState("");
@@ -106,7 +144,7 @@ export default function Screen2({ route, navigation }) {
           handlePress(obj);
         }}
       >
-        <Image source={obj.img} style={{ width: 100, height: 100 }} />
+        <Image source={{ uri: obj.img }} style={{ width: 100, height: 100 }} />
         <Text>{obj.name}</Text>
       </TouchableOpacity>
     );

@@ -7,7 +7,12 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Order your favorite!</Text>
-      <Image source={require("./assets/screen1.jpg")} />
+      <Image
+        source={{
+          uri: "https://res.cloudinary.com/dyoavvrjm/image/upload/v1729321045/uva04kv4gcmvbgd2ud9m.jpg",
+        }}
+        style={{ width: 300, height: 300 }}
+      />
       <TouchableOpacity style={styles.button} onPress={handlePress}>
         <Text style={{ color: "#fff" }}>GET STARTED</Text>
       </TouchableOpacity>
