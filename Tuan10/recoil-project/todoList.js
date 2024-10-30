@@ -55,7 +55,7 @@ const TodoList = () => {
                 {item.title}
               </Text>
             </TouchableOpacity>
-            <Button title="Edit" onPress={() => handleRemoveTodo(item.id)} />
+            
             <Button title="Delete" onPress={() => handleRemoveTodo(item.id)} />
           </View>
         )}

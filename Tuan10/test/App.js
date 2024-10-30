@@ -40,7 +40,7 @@ const DataComponent = () => {
   return (
     <ScrollView style ={{width:"50%"}}>
       <TextInput
-        placeholder="Enter item"
+        placeholder="Add a new todo"
         value={title}
         onChangeText={setTitle}
         style={{ borderWidth: 1, marginBottom: 10, padding: 5 }}
