@@ -1,23 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchTodos, addTodo, removeTodo, toggleTodo, selectTodos, selectTodosStatus } from './todoSilce';
-
+import { useRecoilState } from 'recoil';
+import { todoListState } from './todoAtom';
+import { fetchTodos, addTodo, removeTodo, toggleTodo } from './todoAPI';
 const TodoList = () => {
+  const [todos, setTodos] = useRecoilState(todoListState);
   const [inputValue, setInputValue] = useState('');
-  const dispatch = useDispatch();
-  const todos = useSelector(selectTodos);
-  const status = useSelector(selectTodosStatus);
 
   useEffect(() => {
-    dispatch(fetchTodos());
-  }, [dispatch]);
+    const getTodos = async () => {
+      const fetchedTodos = await fetchTodos();
+      setTodos(fetchedTodos);
+    };
 
-  const handleAddTodo = () => {
+    getTodos();
+  }, [setTodos]);
+
+  const handleAddTodo = async () => {
     if (inputValue.trim()) {
-      dispatch(addTodo({ id: Date.now(), title: inputValue, completed: false }));
+      const newTodo = { name: inputValue, completed: false };
+      const addedTodo = await addTodo(newTodo);
+      setTodos([...todos, addedTodo]);
       setInputValue('');
     }
+  };
+
+  const handleRemoveTodo = async (id) => {
+    await removeTodo(id);
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  const handleToggleTodo = async (todo) => {
+    const updatedTodo = await toggleTodo(todo);
+    setTodos(todos.map(t => (t.id === updatedTodo.id ? updatedTodo : t)));
   };
 
   return (
@@ -30,18 +45,18 @@ const TodoList = () => {
         placeholder="Add a new todo"
       />
       <Button title="Create" onPress={handleAddTodo} />
-      {status === 'loading' && <Text>Loading...</Text>}
       <FlatList
         data={todos}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.todoItem}>
-            <TouchableOpacity onPress={() => dispatch(toggleTodo(item))}>
+            <TouchableOpacity onPress={() => handleToggleTodo(item)}>
               <Text style={{ textDecorationLine: item.completed ? 'line-through' : 'none' }}>
                 {item.title}
               </Text>
             </TouchableOpacity>
-            <Button title="Delete" onPress={() => dispatch(removeTodo(item.id))} />
+            <Button title="Edit" onPress={() => handleRemoveTodo(item.id)} />
+            <Button title="Delete" onPress={() => handleRemoveTodo(item.id)} />
           </View>
         )}
       />
@@ -53,7 +68,6 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     flex: 1,
-    justifyContent: 'center',
   },
   title: {
     fontSize: 24,
