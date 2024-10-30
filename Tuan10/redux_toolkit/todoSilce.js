@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = 'https://jsonplaceholder.typicode.com/todos';
+const API_URL = 'https://66fc8f39c3a184a84d174f4d.mockapi.io/Item';
 
 // Thunk để lấy todos từ API
 export const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
